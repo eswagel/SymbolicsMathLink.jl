@@ -1,7 +1,5 @@
 # SymbolicsMathLink
 
-[![Build Status](https://github.com/eswagel/SymbolicsMathLink.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/eswagel/SymbolicsMathLink.jl/actions/workflows/CI.yml?query=branch%3Amain)
-
 SymbolicsMathLink.jl is a Julia package that provides a MathLink interface to Mathematica for symbolic computations. It allows you to call Mathematica functions on Julia Symbolics expressions. Extensive testing has been done to ensure type stability and other optimizations. This project came out of my senior thesis.
 
 For example, Mathematica excels at solving complicated equations and differential equations, functionalities that cannot easily be done in Julia. The `wcall` function allows Mathematica's operations to be performed seamlessly on Julia Symbolics, with minimum effort on the front end.
