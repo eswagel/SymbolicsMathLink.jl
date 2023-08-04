@@ -6,7 +6,7 @@ For example, Mathematica excels at solving complicated equations and differentia
 
 ## Installation
 
-To run SymbolicsMathLink.jl, both the [Symbolics.jl](https://github.com/JuliaSymbolics/Symbolics.jl) package and the [MathLink.jl](https://github.com/JuliaInterop/MathLink.jl) package must be installed **and configured**. See details in MathLink.jl for more information, but be aware that it takes some effort.
+To run SymbolicsMathLink.jl, both the [Symbolics.jl](https://github.com/JuliaSymbolics/Symbolics.jl) package and the [MathLink.jl](https://github.com/JuliaInterop/MathLink.jl) package must be installed **and configured**. That means you must have an active subscription to Mathematica installed on your computer. See details in MathLink.jl for more information, but be aware that it takes some effort.
 
 To install SymbolicsMathLink.jl, run the following command in the Julia REPL:
 
