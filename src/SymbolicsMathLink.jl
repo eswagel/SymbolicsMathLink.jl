@@ -1,4 +1,4 @@
-#module SymbolicsMathLink
+module SymbolicsMathLink
 
 using Symbolics
 using MathLink
@@ -25,4 +25,4 @@ include("Header/mathematica_to_expr.jl")
 #The main function that calls Mathematica on Symbolic objects
 include("wcall.jl")
 
-#end
+end
