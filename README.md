@@ -11,7 +11,8 @@ To run SymbolicsMathLink.jl, both the [Symbolics.jl](https://github.com/JuliaSym
 To install SymbolicsMathLink.jl, run the following command in the Julia REPL:
 
 ```julia
-Pkg.add("SymbolicsMathLink")
+julia> import Pkg;
+julia> Pkg.add("SymbolicsMathLink")
 ```
 
 ## Usage
