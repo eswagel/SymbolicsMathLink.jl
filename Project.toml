@@ -11,7 +11,7 @@ Symbolics = "0c5d862f-8b57-4792-8d23-62f2024744c7"
 [compat]
 julia = "1"
 MathLink = "0.5.1"
-SpecialFunctions = "<2.3.0"
+SpecialFunctions = "2.3.0"
 Symbolics = "[4.10.3,5.5.1]"
 
 [extras]
