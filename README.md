@@ -27,7 +27,7 @@ julia> @variables x;
 julia> expr = x^2 + x - 1;
 
 julia> result = wcall("Solve", expr==0)
-2-element Array{Sym,1}:
+2-element Array{Num,1}:
     -1 + x
     -1 - x
 ```
@@ -38,7 +38,7 @@ julia> @variables vars(x)[1:2];
 julia> expr = Differential(x)(vars[1] + 2
 2 + Differential(x)((vars(x))[1])
 julia> result = wcall("DSolveValues", expr==0, vars[1], x)
-1-element Array{Sym,1}:
+1-element Array{Num,1}:
     -2x
 ```
 
