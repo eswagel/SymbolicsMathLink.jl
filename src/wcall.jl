@@ -29,7 +29,7 @@ function wcall(head::AbstractString, args...; returnJulia=true,kwargs...)
 end
 wcall(head::AbstractString, args::Vararg{Mtypes}; returnJulia=true, kwargs...) = begin
     mathematica_result = weval(MathLink.WSymbol(head)(args...; kwargs...))
-    if istrue(returnJulia)
+    if returnJulia
         return mathematica_to_expr(mathematica_result)
     else
         return mathematica_result
