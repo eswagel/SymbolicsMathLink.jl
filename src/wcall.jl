@@ -1,13 +1,12 @@
-function wcall(head::AbstractString, args...; returnJulia=true,kwargs...)
-    """
-    wcall(head::AbstractString, args...; returnJulia=true, kwargs...)
+"""
+    wcall([returnJulia::Val{bool},] head::AbstractString, args...; returnJulia=Val(true), kwargs...)
 
     Calls a Mathematica function on arguments of Symbolics and other Julia types, converting those arguments to Mathematica, and then changing the result back to Julia.
 
     # Arguments
+    - `returnJulia`: Optional. If `Val(false)`, the function will return a Mathematica MathLink object instead of converting back to Julia.
     - `head::AbstractString`: The name of the Mathematica function to call.
     - `args...`: The arguments to the Mathematica function. These can be Symbolics, Julia types, or Mathematica types.
-    - `returnJulia::Bool=true`: If `false`, the function will return a Mathematica MathLink object instead of converting back to Julia.
     - `kwargs...`: Keyword arguments to the Mathematica function. These can be Symbolics, Julia types, or Mathematica types.
 
     # Returns
@@ -25,15 +24,15 @@ function wcall(head::AbstractString, args...; returnJulia=true,kwargs...)
     -1 - x
     ```
 """
-    return wcall(head, expr_to_mathematica.(args)...;returnJulia=returnJulia, kwargs...)
+function wcall(::Val{false}, head::AbstractString, args...; kwargs...)
+    mathematica_result = wcall(head, args...; kwargs...)
+    return convert_to_julia(mathematica_result)
 end
-wcall(head::AbstractString, args::Vararg{Mtypes}; returnJulia=true, kwargs...) = begin
-    mathematica_result = weval(MathLink.WSymbol(head)(args...; kwargs...))
-    if returnJulia
-        return mathematica_to_expr(mathematica_result)
-    else
-        return mathematica_result
-    end
+
+ wcall(::Val{true}, head::AbstractString, args...; kwargs...)=begin
+    return weval(MathLink.WSymbol(head)(args...; kwargs...))
 end
+
+wcall(head::AbstractString, args...; kwargs...) = wcall(Val(true), head, args...; kwargs...)
 
 export wcall

@@ -6,7 +6,7 @@ For example, Mathematica excels at solving complicated equations and differentia
 
 ## Installation
 
-To run SymbolicsMathLink.jl, both the [Symbolics.jl](https://github.com/JuliaSymbolics/Symbolics.jl) package and the [MathLink.jl](https://github.com/JuliaInterop/MathLink.jl) package must be installed **and configured**. That means you must have an active subscription to Mathematica installed on your computer. See details in MathLink.jl for more information, but be aware that it takes some effort.
+To run SymbolicsMathLink.jl, both the [Symbolics.jl](https://github.com/JuliaSymbolics/Symbolics.jl) package and the [MathLink.jl](https://github.com/JuliaInterop/MathLink.jl) package must be installed **and configured**. That means you must have an active subscription to Mathematica or the free Wolfram Engine installed on your computer. See details in MathLink.jl for more information, but be aware that it takes some effort.
 
 To install SymbolicsMathLink.jl, run the following command in the Julia REPL:
 
@@ -46,13 +46,13 @@ Additionally, piecewise functions are supported through `Symbolics.IfElse.ifelse
 
 The package exports only the function `wcall`:
 ```julia
-wcall(head::AbstractString, args...; returnJulia=true, kwargs...)
+wcall([returnJulia::Val{bool},] head::AbstractString, args...; kwargs...)
 ```
-`head` is the name of the Mathematica function to be called, for example: `Solve`, or `DSolve`, etc.
+`head` is the name of the Mathematica function to be called, for example: `"Solve"`, or `"DSolve"`, etc.
 `args` are the arguments to be passed to the `head` function in Mathematica. These will be converted automatically to MathLink objects.
 `kwargs` are the keyword arguments to be passed to the `head` function in Mathematica. These will be converted automatically to MathLink objects.
 
-If `returnJulia=true` (default), `wcall` converts the Mathematica result back to Julia Symbolics, and you don't need to worry at all about what's going on under the hood. If you want to manipulate the MathLink result further for any reason, set `returnJulia=false` and it will return the result as a MathLink object.
+If `returnJulia` is `Val(true)` (default), `wcall` converts the Mathematica result back to Julia Symbolics, and you don't need to worry at all about what's going on under the hood. If you want to manipulate the MathLink result further for any reason, pass `Val(false)` as the first argument and it will return the result as a MathLink object.
 
 ## Use Case: Evaluating Long Functions
 
@@ -71,7 +71,7 @@ julia> wcall("ReplaceAll",hermite,[x,10])
 
 ## Contributing
 
-Contributions to SymbolicsMathLink.jl are welcome! To contribute, please fork the repository and submit a pull request.
+Contributions to SymbolicsMathLink.jl are welcome! To contribute, please submit a pull request.
 
 ## License
 
