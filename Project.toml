@@ -1,7 +1,7 @@
 name = "SymbolicsMathLink"
 uuid = "7963cd39-1b62-4514-9cf0-788fb5452611"
 authors = ["E. Swagel"]
-version = "1.0.1"
+version = "2.0.0"
 
 [deps]
 MathLink = "18c93696-a329-5786-9845-8443133fa0b4"
