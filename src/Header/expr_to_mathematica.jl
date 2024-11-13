@@ -64,7 +64,7 @@ end
 (expr_to_mathematica(num::T)::T) where {T<:Mtypes}=num
 expr_to_mathematica(eq::Equation)::MathLink.WExpr=MathLink.WSymbol("Equal")(expr_to_mathematica(Symbolics.toexpr(eq.lhs)::Union{Expr, Symbol, Int, Float64, Rational}),expr_to_mathematica(Symbolics.toexpr(eq.rhs)::Union{Expr, Symbol, Int, Float64, Rational}))
 (expr_to_mathematica(vect::Vector{T})::MathLink.WExpr) where T=MathLink.WSymbol("List")(expr_to_mathematica.(vect)...)
-(expr_to_mathematica(mat::Matrix{T})::MathLink.WExpr) where T = expr_to_mathematica([mat[:,i] for i in 1:size(mat,2)])
+(expr_to_mathematica(mat::Matrix{T})::MathLink.WExpr) where T = expr_to_mathematica([mat[i, :] for i in 1:size(mat,1)])
 expr_to_mathematica(num::Num)::Mtypes=expr_to_mathematica(Symbolics.toexpr(num)::Union{Expr, Symbol, Int, Float64, Rational})
 expr_to_mathematica(dict::Dict)::MathLink.WExpr=begin
     rules = MathLink.WExpr[]
