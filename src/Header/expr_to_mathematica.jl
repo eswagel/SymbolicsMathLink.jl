@@ -13,7 +13,7 @@ expr_to_mathematica_vector_handler(expr::MathLink.WExpr,index::Integer)=begin
     #If expr.head.name contains any of ■₁₂₃₄₅₆₇₈₉₀, throw an error
     #Regexmatch for any of the above characters
     m = match(r"■[₁₂₃₄₅₆₇₈₉₀]",expr.head.name)
-    if m!=nothing
+    if !isnothing(m)
         #Throw an error with that character
         throw(ArgumentError("The character $(m[1]) is not allowed in a variable name"))
     end
@@ -73,7 +73,10 @@ expr_to_mathematica(dict::Dict)::MathLink.WExpr=begin
     end
     MathLink.WSymbol("List")(rules...)
 end
-expr_to_mathematica(sym::Symbolics.Symbolic)::MathLink.WExpr=begin
+expr_to_mathematica(pair::Pair{T1, T2}) where {T1, T2} = begin
+    return MathLink.WSymbol("Rule")(expr_to_mathematica(pair.first), expr_to_mathematica(pair.second))
+end
+endexpr_to_mathematica(sym::Symbolics.Symbolic)::MathLink.WExpr=begin
     expr::Expr = Symbolics.toexpr(sym)::Expr
     expr_to_mathematica(expr)
 end
