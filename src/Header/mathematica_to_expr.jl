@@ -53,3 +53,4 @@ mathematica_to_expr(num::T) where T<:Number=begin
         return num
     end
 end
+mathematica_to_expr(mathematica::T) where T<:AbstractString=mathematica

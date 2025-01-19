@@ -80,6 +80,6 @@ endexpr_to_mathematica(sym::Symbolics.Symbolic)::MathLink.WExpr=begin
     expr::Expr = Symbolics.toexpr(sym)::Expr
     expr_to_mathematica(expr)
 end
-expr_to_mathematica(st::AbstractString)::MathLink.WSymbol=MathLink.WSymbol(st)
+expr_to_mathematica(st::T) where {T<:AbstractString} = st
 expr_to_mathematica(x::BigFloat)=Float64(x)
 expr_to_mathematica(x::Irrational)=Float64(x)
