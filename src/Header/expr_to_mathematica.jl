@@ -3,7 +3,9 @@ function expr_to_mathematica(expr::Expr)::Mtypes
     expr_to_mathematica(expr.head,expr.args)
 end
 #Differentials have to be handled specially
-expr_to_mathematica_differential_checker(function_head::Symbol,args::Vector,::Nothing)::MathLink.WExpr=W"$(string(function_head))"(expr_to_mathematica.(args)...)
+expr_to_mathematica_differential_checker(function_head::Symbol,args::Vector,::Nothing)::MathLink.WExpr= begin
+    MathLink.WSymbol(string(function_head))(expr_to_mathematica.(args)...)
+end
 expr_to_mathematica_differential_checker(function_head::Symbol,args::Vector,m::RegexMatch)::MathLink.WExpr=begin
     return MathLink.WSymbol("D")(expr_to_mathematica.(args)...,MathLink.WSymbol("$(m[1])"))
 end
@@ -73,7 +75,7 @@ expr_to_mathematica(dict::Dict)::MathLink.WExpr=begin
     end
     MathLink.WSymbol("List")(rules...)
 end
-expr_to_mathematica(pair::Pair{T1, T2}) where {T1, T2} = begin
+expr_to_mathematica(pair::Pair{T1, T2}) where {T1<:Mtypes, T2<:Mtypes} = begin
     return MathLink.WSymbol("Rule")(expr_to_mathematica(pair.first), expr_to_mathematica(pair.second))
 end
 endexpr_to_mathematica(sym::Symbolics.Symbolic)::MathLink.WExpr=begin

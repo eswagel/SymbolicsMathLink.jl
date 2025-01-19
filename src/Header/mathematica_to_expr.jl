@@ -1,6 +1,7 @@
 mathematica_to_expr_vector_checker(head::AbstractString,args::Vector,::Nothing)=begin
-    varname=Symbol(head)
-    (vars,)=Symbolics.@variables varname
+    variables = Symbol.(args)
+    varname = Symbol(head)
+    (vars, ) = @variables $varname(variables...)
     vars
 end
 mathematica_to_expr_vector_checker(head::AbstractString,args::Vector,m::RegexMatch)=begin
