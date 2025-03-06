@@ -41,7 +41,7 @@ julia> result = wcall("DSolveValues", expr~0, vars[1], x)
     -2x
 ```
 
-Additionally, piecewise functions are supported through `Symbolics.IfElse.ifelse`.
+Additionally, piecewise functions are supported through `ifelse`.
 
 
 The package exports only the function `wcall`:
