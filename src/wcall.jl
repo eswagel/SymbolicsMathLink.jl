@@ -16,10 +16,10 @@ function wcall(returnJulia::Union{Val{true}, Val{false}}, head::AbstractString, 
 
     # Examples
     ```julia
-    julia> wcall(Val(false), "Solve", x^2 + 2x + 1 == 0)
+    julia> wcall(Val(false), "Solve", x^2 + 2x + 1 ~ 0)
     MathLink.MathLinkObject(...)
 
-    julia> wcall("Solve", x^2 + 2x + 1 == 0)
+    julia> wcall("Solve", x^2 + 2x + 1 ~ 0)
     2-element Array{Sym,1}:
     -1 + x
     -1 - x
