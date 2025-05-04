@@ -43,10 +43,16 @@ using Test
     @variables t
     @test isequal(SymbolicsMathLink.wcall("Integrate", t^2, t), (1//3)*(t^3))
 
+    # Test 12: Test with an equation
+    @variables x
+    expr = x^2 + 2x + 1
+    result = wcall("Solve", expr~0)
+    @test isequal(result, [[x => -1], [x => -1]])
+
     # Test 13: Test with a differential equation solution
     @variables u(t) C_1
     eq = Differential(t)(u) ~ u
     sol = SymbolicsMathLink.wcall("DSolve", eq, u, t)
-    
     @test isequal(string(sol), string([[u => C_1 * Symbolics.exp(t)]]))
+    
 end
