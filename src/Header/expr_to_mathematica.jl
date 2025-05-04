@@ -85,3 +85,5 @@ end
 expr_to_mathematica(st::T) where {T<:AbstractString} = st
 expr_to_mathematica(x::BigFloat)=Float64(x)
 expr_to_mathematica(x::Irrational)=Float64(x)
+
+export expr_to_mathematica

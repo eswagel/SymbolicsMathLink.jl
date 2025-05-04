@@ -6,7 +6,7 @@ mathematica_to_expr_vector_checker(head::AbstractString,args::Vector,::Nothing)=
 end
 mathematica_to_expr_vector_checker(head::AbstractString,args::Vector,m::RegexMatch)=begin
     varname=Symbol(m[1])
-    (vars,)=scalarize.(Symbolics.@variables $varname(mathematica_to_expr.(args)...)[1:parse(Int8,m[2])])
+    (vars,)=Symbolics.scalarize.(Symbolics.@variables $varname(mathematica_to_expr.(args)...)[1:parse(Int8,m[2])])
     vars[parse(Int8,m[2])]
 end
 mathematica_to_expr_differential_checker(head::MathLink.WExpr,args::Vector)::Num=begin
@@ -42,7 +42,7 @@ mathematica_to_expr(symbol::MathLink.WSymbol,::Nothing)=begin
 end
 mathematica_to_expr(symbol::MathLink.WSymbol,m::RegexMatch)=begin
     varname=Symbol(m[1])
-    (vars,)=scalarize.(Symbolics.@variables $varname[1:parse(Int8,m[2])])
+    (vars,)=Symbolics.scalarize.(Symbolics.@variables $varname[1:parse(Int8,m[2])])
     vars[parse(Int8,m[2])]
 end
 mathematica_to_expr(mathematica::MathLink.WReal)=mathematica_to_expr(weval(W"N"(mathematica)))
@@ -55,3 +55,5 @@ mathematica_to_expr(num::T) where T<:Number=begin
     end
 end
 mathematica_to_expr(mathematica::T) where T<:AbstractString=mathematica
+
+export mathematica_to_expr
