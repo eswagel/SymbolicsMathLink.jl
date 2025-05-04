@@ -36,15 +36,14 @@ Derivatives and array variables are also supported:
 julia> @variables vars(x)[1:2];
 julia> expr = Differential(x)(vars[1]) + 2
 2 + Differential(x)((vars(x))[1])
-julia> result = wcall("DSolveValues", expr~0, vars[1], x)
-1-element Array{Num,1}:
-    -2x
+julia> result = wcall("DSolveValue", expr~0, vars[1], x)
+C_1 - 2x
 ```
 
 Additionally, piecewise functions are supported through `ifelse`.
 
 
-The package exports only the function `wcall`:
+The package's main export is the function `wcall`:
 ```julia
 wcall([returnJulia::Val{bool},] head::AbstractString, args...; kwargs...)
 ```
@@ -54,11 +53,32 @@ wcall([returnJulia::Val{bool},] head::AbstractString, args...; kwargs...)
 
 If `returnJulia` is `Val(true)` (default), `wcall` converts the Mathematica result back to Julia Symbolics, and you don't need to worry at all about what's going on under the hood. If you want to manipulate the MathLink result further for any reason, pass `Val(false)` as the first argument and it will return the result as a MathLink object.
 
+### Converting Symbolics and Mathematica
+Under the hood, `wcall` is converting the Julia Symbolics to MathLink expressions, calling `MathLink.weval` to run Mathematica, and then (optionally) converting back to Symbolics. To make those conversions directly, use:
+```julia
+expr_to_mathematica(juliaSymbolicExpression)
+mathematica_to_expr(W`Some Mathematica expression`)
+```
+
+As an example,
+```julia
+julia> @variables x y
+julia> expr_to_mathematica(x^2 + sqrt(y))
+W`Plus[Power[x, 2], Sqrt[y]]`
+```
+
+or 
+
+```julia
+julia> mathematica_to_expr(W`Plus[Power[x, 2], Sqrt[y]]`)
+x^2 + sqrt(y)
+```
+
 ## Use Case: Evaluating Long Functions
 
 I found the function surprisingly useful in evaluating functions for which the code itself is long. For example, if one were to symbolically calculate the 1000th Hermite polynomial:
 ```julia 
-julia> hermite = Hermite(x,1000);
+julia> hermite = Hermite(x,1000); #Assuming existing function called Hermite
 julia> build_function(hermite,x);
 julia> hermite(10)
 
@@ -71,7 +91,7 @@ julia> wcall("ReplaceAll",hermite,[x,10])
 
 ## Contributing
 
-Contributions to SymbolicsMathLink.jl are welcome! To contribute, please submit a pull request.
+Contributions to SymbolicsMathLink.jl are welcome! To contribute, please submit a pull request or raise an issue.
 
 ## License
 
