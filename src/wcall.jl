@@ -1,6 +1,6 @@
 function wcall(returnJulia::Union{Val{true}, Val{false}}, head::AbstractString, args...; kwargs...)
 """
-    wcall([returnJulia::Val{bool},] head::AbstractString, args...; returnJulia=Val(true), kwargs...)
+        wcall([returnJulia::Val{bool},] head::AbstractString, args..., kwargs...)
 
     Calls a Mathematica function on arguments of Symbolics and other Julia types, converting those arguments to Mathematica, and then changing the result back to Julia.
 
@@ -17,12 +17,12 @@ function wcall(returnJulia::Union{Val{true}, Val{false}}, head::AbstractString, 
     # Examples
     ```julia
     julia> wcall(Val(false), "Solve", x^2 + 2x + 1 ~ 0)
-    MathLink.MathLinkObject(...)
+    W`List[List[Rule[x, -1]], List[Rule[x, -1]]]`
 
     julia> wcall("Solve", x^2 + 2x + 1 ~ 0)
-    2-element Array{Sym,1}:
-    -1 + x
-    -1 - x
+    2-element Vector{Vector{Pair{Num, Num}}}:
+    [x => -1]
+    [x => -1]
     ```
 """
 
