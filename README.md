@@ -74,6 +74,11 @@ julia> mathematica_to_expr(W`Plus[Power[x, 2], Sqrt[y]]`)
 x^2 + sqrt(y)
 ```
 
+## Caveats
+Not every Mathematica function is supported, although for many functions it may not be particularly time consuming to add that functionality. Please make a pull request or issue on Github if you encounter one of these examples.
+
+Two key exceptions are Mathematica's `&` and `|` operators. There are no analogs for that functionality in Julia's Symbolics, and therefore those cannot be converted.
+
 ## Use Case: Evaluating Long Functions
 
 I found the function surprisingly useful in evaluating functions for which the code itself is long. For example, if one were to symbolically calculate the 1000th Hermite polynomial:
