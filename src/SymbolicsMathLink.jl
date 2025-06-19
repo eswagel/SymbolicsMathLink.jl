@@ -2,7 +2,6 @@ module SymbolicsMathLink
 
 using Symbolics
 using MathLink
-using SpecialFunctions
 
 #Types that could be used in MathLink
 const Mtypes = Union{MathLink.WTypes,Int8,Int16,Int32,Int64,Int128,UInt8,UInt16,UInt32,UInt64,UInt128,Float16,Float32,Float64,ComplexF16,ComplexF32,ComplexF64,Rational,String}
