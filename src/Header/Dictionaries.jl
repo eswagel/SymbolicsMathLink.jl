@@ -1,3 +1,5 @@
+using SpecialFunctions
+
 # Define a dictionary that maps Mathematica function names to their Julia equivalents - not comprehensive
 const MATHEMATICA_TO_JULIA_FUNCTIONS::Dict{String,Function} = Dict(
     "Plus" => +,
@@ -82,7 +84,8 @@ const MATHEMATICA_TO_JULIA_FUNCTIONS::Dict{String,Function} = Dict(
     "BesselK" => besselk,
     "HankelH1" => hankelh1,
     "HankelH2" => hankelh2,
-    "Zeta" => zeta
+    "Zeta" => zeta,
+    "Pair" => (a,b)->a=>b
 )
 
 const JULIA_FUNCTIONS_TO_MATHEMATICA = Dict(

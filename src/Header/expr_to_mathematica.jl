@@ -75,7 +75,7 @@ expr_to_mathematica(dict::Dict)::MathLink.WExpr=begin
     end
     MathLink.WSymbol("List")(rules...)
 end
-expr_to_mathematica(pair::Pair{T1, T2}) where {T1<:Mtypes, T2<:Mtypes} = begin
+expr_to_mathematica(pair::Pair) = begin
     return MathLink.WSymbol("Rule")(expr_to_mathematica(pair.first), expr_to_mathematica(pair.second))
 end
 endexpr_to_mathematica(sym::Symbolics.Symbolic)::MathLink.WExpr=begin

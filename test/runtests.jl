@@ -54,5 +54,15 @@ using Test
     eq = Differential(t)(u) ~ u
     sol = SymbolicsMathLink.wcall("DSolve", eq, u, t)
     @test isequal(string(sol), string([[u => C_1 * Symbolics.exp(t)]]))
+
+    # Test 14: Test inverse trig (cosecant) function
+    @variables x
+    @test SymbolicsMathLink.wcall(Val(false), "Csc", x, ) == W`Csc[x]`
     
+    #Test 15: Test that expr_to_mathematica works properly
+    @variables x y a b
+    rules = [x => 1, y => 2, a => b]
+    expr = x^2 + y^2 + a
+    replaced = SymbolicsMathLink.wcall("ReplaceAll", expr, rules)
+    @test isequal(replaced, 1^2 + 2^2 + b)
 end
