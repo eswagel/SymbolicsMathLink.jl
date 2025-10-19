@@ -152,5 +152,6 @@ const JULIA_FUNCTIONS_TO_MATHEMATICA = Dict(
     :besselk => "BesselK",
     :hankelh1 => "HankelH1",
     :hankelh2 => "HankelH2",
-    :zeta => "Zeta"
+    :zeta => "Zeta",
+    :getindex => "Subscript"
 )

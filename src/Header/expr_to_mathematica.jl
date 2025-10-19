@@ -14,7 +14,7 @@ expr_to_mathematica_vector_handler(expr::MathLink.WSymbol,index::Integer)=MathLi
 expr_to_mathematica_vector_handler(expr::MathLink.WExpr,index::Integer)=begin
     #If expr.head.name contains any of ■₁₂₃₄₅₆₇₈₉₀, throw an error
     #Regexmatch for any of the above characters
-    m = match(r"■[₁₂₃₄₅₆₇₈₉₀]",expr.head.name)
+    m = match(r"■[₁₂₃₄₅₆₇₈₉₀ˏ]",expr.head.name)
     if !isnothing(m)
         #Throw an error with that character
         throw(ArgumentError("The character $(m[1]) is not allowed in a variable name"))
@@ -30,9 +30,9 @@ expr_to_mathematica(function_head::Symbol,args::Vector)::Mtypes=begin
         return expr_to_mathematica(Symbol(args[1]),args[2:end])
     elseif function_head==:inv #Symbolics uses inv instead of ^-1
         return MathLink.WSymbol("Power")(expr_to_mathematica(args[1]),-1)
-    elseif function_head==:getindex
-        would_be = expr_to_mathematica(args[1])
-        return expr_to_mathematica_vector_handler(would_be, args[2])
+    # elseif function_head==:getindex
+    #     would_be = expr_to_mathematica(args[1])
+    #     return expr_to_mathematica_vector_handler(would_be, args[2])
     elseif function_head==:if
         #If gets turned into piecewise
         cond = expr_to_mathematica(args[1])
@@ -51,15 +51,18 @@ expr_to_mathematica(function_head::Symbol,args::Vector)::Mtypes=begin
 end
 expr_to_mathematica_symbol_vector_checker(str::String,m::Nothing)=MathLink.WSymbol(str)
 expr_to_mathematica_symbol_vector_checker(str::String,m::RegexMatch)=begin
-    replacements=("₁"=>"1","₂"=>"2","₃"=>"3","₄"=>"4","₅"=>"5","₆"=>"6","₇"=>"7","₈"=>"8","₉"=>"9","₀"=>"0")
-    MathLink.WSymbol("$(m[1])■$(replace(m[2],replacements...))")
+    replacements=("₁"=>"1","₂"=>"2","₃"=>"3","₄"=>"4","₅"=>"5","₆"=>"6","₇"=>"7","₈"=>"8","₉"=>"9","₀"=>"0","ˏ"=>",")
+    indices = split(replace(m[2],replacements...),",")
+    indices = map(ind->parse(Int64, ind), indices)
+    m = MathLink.WSymbol("Subscript")(MathLink.WSymbol(m[1]), expr_to_mathematica.(indices)...)
+    m
 end
-expr_to_mathematica(symbol::Symbol)::MathLink.WSymbol=begin
+expr_to_mathematica(symbol::Symbol)::MathLink.WTypes=begin
     if haskey(JULIA_FUNCTIONS_TO_MATHEMATICA, symbol)
         return MathLink.WSymbol(JULIA_FUNCTIONS_TO_MATHEMATICA[symbol])
     else
         symString=string(symbol)
-        m=match(r"([^₁₂₃₄₅₆₇₈₉₀]*)([₁|₂|₃|₄|₅|₆|₇|₈|₉|₀]+)$",symString)
+        m=match(r"([^₁₂₃₄₅₆₇₈₉₀ˏ]*)([₁|₂|₃|₄|₅|₆|₇|₈|₉|₀|ˏ]+)$",symString)
         return expr_to_mathematica_symbol_vector_checker(symString,m)
     end
 end
