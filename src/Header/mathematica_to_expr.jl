@@ -19,12 +19,21 @@ mathematica_to_expr_differential_checker(head::MathLink.WExpr,args::Vector)::Num
         throw(ArgumentError("Not a derivative: problem in mathematica_to_expr_differential_checker"))
     end
 end
-mathematica_to_subscript_expr(symb::MathLink.WSymbol,indices::Vector)=begin
+mathematica_to_subscript_expr(symb::AbstractString,indices::Vector)=begin
     ranges = map(ind -> 1:ind, indices)
-    varname = Symbol(symb)
-    (vars,)= Symbolics.scalarize.(Symbolics.@variables $varname[ranges...])
+    if symb[end] == 'ₛ'
+        varname = Symbol(symb[1:end-1])
+        vars = Symbolics.variables(varname, ranges...)
+    else
+        varname = Symbol(symb)
+        (vars,)= Symbolics.scalarize.(Symbolics.@variables $varname[ranges...])
+    end
     indices = length(indices) == 1 ? indices[1] : indices
     vars[indices...]
+end
+mathematica_to_subscript_expr(symb::MathLink.WSymbol,indices::Vector)=begin
+    varstring = string(symb)
+    mathematica_to_subscript_expr(varstring)
 end
 
 mathematica_to_expr_differential_checker(head::MathLink.WSymbol,args::Vector)=begin
@@ -55,12 +64,8 @@ mathematica_to_expr(symbol::MathLink.WSymbol,::Nothing)=begin
     end
 end
 mathematica_to_expr(symbol::MathLink.WSymbol,m::RegexMatch)=begin
-    varname=Symbol(m[1])
     indices = map(s -> parse(Int8, s), split(replace(m[2]," "=>""), ",")) 
-    ranges = map(ind -> 1:ind, indices)
-    (vars,)=Symbolics.scalarize.(Symbolics.@variables $varname[ranges...])
-    indices = length(indices) == 1 ? indices[1] : indices
-    vars[indices...]
+    mathematica_to_subscript_expr(m[1],indices::Vector)
 end
 mathematica_to_expr(mathematica::MathLink.WReal)=mathematica_to_expr(weval(W"N"(mathematica)))
 mathematica_to_expr(num::T) where T<:Number=begin

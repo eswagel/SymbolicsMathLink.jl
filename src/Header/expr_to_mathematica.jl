@@ -54,7 +54,7 @@ expr_to_mathematica_symbol_vector_checker(str::String,m::RegexMatch)=begin
     replacements=("₁"=>"1","₂"=>"2","₃"=>"3","₄"=>"4","₅"=>"5","₆"=>"6","₇"=>"7","₈"=>"8","₉"=>"9","₀"=>"0","ˏ"=>",")
     indices = split(replace(m[2],replacements...),",")
     indices = map(ind->parse(Int64, ind), indices)
-    m = MathLink.WSymbol("Subscript")(MathLink.WSymbol(m[1]), expr_to_mathematica.(indices)...)
+    m = MathLink.WSymbol("Subscript")(MathLink.WSymbol(m[1]*"ₛ"), expr_to_mathematica.(indices)...)
     m
 end
 expr_to_mathematica(symbol::Symbol)::MathLink.WTypes=begin
