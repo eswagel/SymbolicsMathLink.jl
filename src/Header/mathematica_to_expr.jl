@@ -33,7 +33,7 @@ mathematica_to_subscript_expr(symb::AbstractString,indices::Vector)=begin
 end
 mathematica_to_subscript_expr(symb::MathLink.WSymbol,indices::Vector)=begin
     varstring = string(symb)
-    mathematica_to_subscript_expr(varstring)
+    mathematica_to_subscript_expr(varstring, indices)
 end
 
 mathematica_to_expr_differential_checker(head::MathLink.WSymbol,args::Vector)=begin
