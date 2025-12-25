@@ -42,8 +42,7 @@ mathematica_to_expr_differential_checker(head::MathLink.WSymbol,args::Vector)=be
     elseif head.name=="Subscript" && isa(args[1],MathLink.WSymbol)
         return mathematica_to_subscript_expr(args[1], args[2:end])
     elseif haskey(MATHEMATICA_TO_JULIA_FUNCTIONS, head.name)
-        stuff = mathematica_to_expr.(args)
-        return MATHEMATICA_TO_JULIA_FUNCTIONS[head.name](stuff...)
+        return MATHEMATICA_TO_JULIA_FUNCTIONS[head.name](mathematica_to_expr.(args)...)
     else
         m=match(r"Subscript\[\s*(\w+?),\s*(\d+(?:\s*,\s*\d+)*)\]",head.name)
         return mathematica_to_expr_vector_checker(head.name,args,m)
