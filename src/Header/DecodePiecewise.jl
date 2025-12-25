@@ -3,9 +3,9 @@ function decode_piecewise(lists::Vector{Vector{Num}}, lastval)
     @nospecialize
     second_to_lastval::Vector = lists[end]
     ret = ifelse(second_to_lastval[2], second_to_lastval[1], lastval)
-    for i=length(lists)-2:-1:1
+    for i = length(lists) - 2:-1:1
         cur_val::Vector = lists[i]
-        ret = ifelse(curval[2], curval[1], ret)
+        ret = ifelse(cur_val[2], cur_val[1], ret)
     end
     ret
 end
