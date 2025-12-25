@@ -65,4 +65,11 @@ using Test
     expr = x^2 + y^2 + a
     replaced = SymbolicsMathLink.wcall("ReplaceAll", expr, rules)
     @test isequal(replaced, 1^2 + 2^2 + b)
+
+    # Test 16: Subscripted array elements round-trip through Mathematica conversion
+    @variables arr[1:2, 1:3]
+    sub_el = arr[2, 3]
+    mathematica_sub = SymbolicsMathLink.expr_to_mathematica(sub_el)
+    roundtripped = SymbolicsMathLink.mathematica_to_expr(mathematica_sub)
+    @test Symbolics.toexpr(roundtripped) == Symbolics.toexpr(sub_el)
 end
