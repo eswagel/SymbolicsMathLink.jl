@@ -104,4 +104,12 @@ using Test
     dict_math = SymbolicsMathLink.expr_to_mathematica(dict)
     converted_rules = SymbolicsMathLink.mathematica_to_expr(dict_math)
     @test Dict(converted_rules) == dict
+
+    # Test 21: Subscripted array elements round-trip through Mathematica conversion
+    @variables arr[1:2, 1:3]
+    sub_el = arr[2, 3]
+    mathematica_sub = SymbolicsMathLink.expr_to_mathematica(sub_el)
+    roundtripped = SymbolicsMathLink.mathematica_to_expr(mathematica_sub)
+    @test Symbolics.toexpr(roundtripped) == Symbolics.toexpr(sub_el)
 end
+
