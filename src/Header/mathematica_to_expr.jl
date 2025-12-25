@@ -1,5 +1,9 @@
+convert_mathematica_to_symbol(sym::MathLink.WSymbol) = Symbol(sym.name)
+
+convert_mathematica_to_symbol(expr::MathLink.WExpr) = Symbol(expr.head.name * "(" * join(string.(expr.args), ", ") * ")")
+
 mathematica_to_expr_vector_checker(head::AbstractString,args::Vector,::Nothing)=begin
-    variables = Symbol.(args)
+    variables = convert_mathematica_to_symbol.(args)
     varname = Symbol(head)
     (vars, ) = @variables $varname(variables...)
     vars
@@ -13,7 +17,7 @@ mathematica_to_expr_vector_checker(head::AbstractString,args::Vector,m::RegexMat
     vars[indices...]
 end
 mathematica_to_expr_differential_checker(head::MathLink.WExpr,args::Vector)::Num=begin
-    if head.head.head.name=="Derivative"
+    if head.head.head.name=="Derivative" || head.head.head.name=="D"
         return (Differential(Symbolics.variable(args[1]))^head.head.args[1])(eval(Symbol(head.args[1])))
     else
         throw(ArgumentError("Not a derivative: problem in mathematica_to_expr_differential_checker"))
