@@ -21,19 +21,23 @@ Simply call `wcall` on a Julia symbolics object, naturally filling in the argume
 
 ```julia
 julia> using SymbolicsMathLink
+julia> using Symbolics
 
 julia> @variables x;
-julia> expr = x^2 + x - 1;
+julia> expr = x^2 - 1;
 
 julia> result = wcall("Solve", expr~0)
-2-element Array{Num,1}:
-    -1 + x
-    1 + x
+2-element Vector{Vector{Pair{Num, Num}}}:
+ [x => -1]
+ [x => 1]
 ```
 
 Derivatives and array variables are also supported:
 ```julia
-julia> @variables vars(x)[1:2];
+julia> using SymbolicsMathLink
+julia> using Symbolics
+
+julia> @variables x vars(x)[1:2];
 julia> expr = Differential(x)(vars[1]) + 2
 2 + Differential(x)((vars(x))[1])
 julia> result = wcall("DSolveValue", expr~0, vars[1], x)
@@ -64,14 +68,14 @@ As an example,
 ```julia
 julia> @variables x y
 julia> expr_to_mathematica(x^2 + sqrt(y))
-W`Plus[Power[x, 2], Sqrt[y]]`
+W`Plus[Sqrt[y], Power[x, 2]]`
 ```
 
 or 
 
 ```julia
 julia> mathematica_to_expr(W`Plus[Power[x, 2], Sqrt[y]]`)
-x^2 + sqrt(y)
+sqrt(y) + x^2
 ```
 
 ## Caveats
@@ -90,7 +94,7 @@ julia> hermite(10)
 ```
 Because the `hermite` Symbolic expression is a very long AST, function compilation takes a long time upon first evaluation. Converting to Mathematica and evaluating can actually lead to surprising benefits:
 ```julia
-julia> wcall("ReplaceAll",hermite,[x,10])
+julia> wcall("ReplaceAll", hermite, x => 10)
 ```
 
 
