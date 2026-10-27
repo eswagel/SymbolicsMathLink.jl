@@ -4,6 +4,7 @@ using MathLink
 using Test
 
 include("conversions.jl")
+include("piecewise.jl")
 
 # The default test run includes real Wolfram calls. CI can exercise the
 # converters without a Wolfram license by explicitly selecting this mode.
