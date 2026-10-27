@@ -102,6 +102,23 @@ julia> wcall("ReplaceAll", hermite, x => 10)
 
 Contributions to SymbolicsMathLink.jl are welcome! To contribute, please submit a pull request or raise an issue.
 
+### Testing
+
+Symbolics 6 and 7 are supported. To run the complete test suite, including
+Mathematica calls, configure MathLink with a working Wolfram installation and run:
+
+```julia
+using Pkg
+Pkg.test("SymbolicsMathLink")
+```
+
+CI tests the expression converters with both Symbolics major versions on Julia
+1.10 and the current stable Julia. These tests do not require a Wolfram license.
+For this mode in an environment without Wolfram, set
+`JULIA_REGISTRYCI_AUTOMERGE=true` before installing/building MathLink and
+`SYMBOLICSMATHLINK_TEST_MODE=conversions` before running the tests. This mode skips
+all Wolfram integration tests; the default test run includes them.
+
 ## License
 
 SymbolicsMathLink.jl is licensed under the [MIT License](https://opensource.org/licenses/MIT).

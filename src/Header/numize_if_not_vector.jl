@@ -5,4 +5,4 @@ numize_if_not_vector(x::Num)=x
 numize_if_not_vector(x)=Num(x)
 numize_if_not_vector(x::Pair)=numize_if_not_vector(x[1]) => numize_if_not_vector(x[2])
 
-Num(x::Complex)=Num(real(x))+Num(imag(x))*im
+numize_if_not_vector(x::Complex)=Num(real(x))+Num(imag(x))*im

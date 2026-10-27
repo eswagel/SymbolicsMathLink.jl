@@ -27,6 +27,16 @@ expr_to_mathematica(function_head::Symbol,args::Vector)::Mtypes=begin
     """ Convert a Julia expression head and args to a MathLink expression"""
     
     if function_head==:call
+        # Symbolics 7 emits literal_pow(^, x, Val(n)) for integer powers.
+        if args[1] === Base.literal_pow
+            return expr_to_mathematica(:^, Any[args[3], args[4].args[2]])
+        elseif args[1] isa Differential
+            differential = args[1]
+            variable = expr_to_mathematica(differential.x)
+            order = hasproperty(differential, :order) ? differential.order : 1
+            specification = order == 1 ? variable : MathLink.WSymbol("List")(variable, order)
+            return MathLink.WSymbol("D")(expr_to_mathematica(args[2]), specification)
+        end
         return expr_to_mathematica(Symbol(args[1]),args[2:end])
     elseif function_head==:inv #Symbolics uses inv instead of ^-1
         return MathLink.WSymbol("Power")(expr_to_mathematica(args[1]),-1)
@@ -81,12 +91,12 @@ end
 expr_to_mathematica(pair::Pair) = begin
     return MathLink.WSymbol("Rule")(expr_to_mathematica(pair.first), expr_to_mathematica(pair.second))
 end
-endexpr_to_mathematica(sym::Symbolics.Symbolic)::MathLink.WExpr=begin
-    expr::Expr = Symbolics.toexpr(sym)::Expr
-    expr_to_mathematica(expr)
+expr_to_mathematica(sym::Symbolics.BasicSymbolic)::Mtypes=begin
+    expr_to_mathematica(Symbolics.toexpr(sym))
 end
 expr_to_mathematica(st::T) where {T<:AbstractString} = st
 expr_to_mathematica(x::BigFloat)=Float64(x)
 expr_to_mathematica(x::Irrational)=Float64(x)
+expr_to_mathematica(x::Complex{<:Integer})=MathLink.WSymbol("Complex")(real(x), imag(x))
 
 export expr_to_mathematica
